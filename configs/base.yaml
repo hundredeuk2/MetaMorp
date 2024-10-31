@@ -1,0 +1,25 @@
+prompt:
+  system_prompt: "당신은 유용한 AI 어시스턴트입니다."
+  input_prompt: "문서를 보고 대답해주세요
+  ### 문서 : {문서}
+  ### 질문 : {질문}"
+
+model: 
+  model_name: "Qwen/Qwen2.5-1.5B"
+  vllm_config: { 'max_model_len': 4096, 'tensor_parallel_size': 2, 'gpu_memory_utilization': 0.9,
+         'enforce_eager': True, 'dtype': "bfloat16"
+         } # 'enable_lora': False, 'max_lora_rank': 64, 
+
+data: 
+  data_path: './data/sample.xlsx'
+  save_path: './data/sample'
+  save_type: 'csv'
+
+generate:
+  use_chat: True
+  vllm_gen_config: {
+        "max_tokens": 1024,
+        "temperature": 0,
+        "top_p": 1.0,
+        "stop": ["Instruction:", "Instruction", "Response:", "Response","<|eot_id|>"]
+    }
