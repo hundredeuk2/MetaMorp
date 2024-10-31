@@ -2,7 +2,7 @@
 name = "metamorp"
 version = "0.1.0"
 description = "Inference LLM model easily"
-authors = ["hundredeuk2"]
+authors = ["Heondeuk Lee <leehd1995@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
