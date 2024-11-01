@@ -21,7 +21,6 @@ class InferenceEngine:
         self.prompt_config = self.args.prompt
         self.model_config = self.args.model
         self.generate_config = self.args.generate
-        self.vllm_generate_config = SamplingParams(**self.generate_config.vllm_gen_config)
 
         self.tokenizer = None
         self.model = None
@@ -89,12 +88,13 @@ class InferenceEngine:
             # os.environ["CUDA_VISIBLE_DEVICES"]= "0,1" # Use GPU devices list
             os.environ["CUDA_VISIBLE_DEVICES"]= ','.join([str(x) for x in range(self.model_config.device_count)]) # Use GPU devices list
             base_device_name = torch.cuda.get_device_properties(0).name
-
+            
             if "A100" not in base_device_name:
                 self.model_config.vllm_config.dtype = "half"
                 
             from vllm import LLM
             # Todo: enable adapter
+            self.vllm_generate_config = SamplingParams(**self.generate_config.vllm_gen_config)
             self.tokenizer = AutoTokenizer.from_pretrained(self.model_config.model_name)
             self.model = LLM(model = self.model_config.model_name,
                 **self.model_config.vllm_config
