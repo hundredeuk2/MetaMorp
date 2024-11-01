@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "metamorp"
-version = "0.1.0"
+version = "0.1.1"
 description = "Inference LLM model easily"
 authors = ["Heondeuk Lee <leehd1995@gmail.com>"]
 readme = "README.md"
@@ -12,7 +12,8 @@ jupyter = "^1.1.1"
 ipykernel = "^6.29.5"
 openpyxl = "^3.1.5"
 omegaconf = "^2.3.0"
-pandas = "2.0.3"
+pandas = "2.2.3"
+datasets = "3.1.0"
 
 
 [build-system]

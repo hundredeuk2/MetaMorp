@@ -59,7 +59,8 @@ class InferenceEngine:
         
         # Todo: Clozed Model initalize
         os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"  # Arrange GPU devices starting from 0
-        os.environ["CUDA_VISIBLE_DEVICES"]= "0,1" # Use GPU devices list
+        # os.environ["CUDA_VISIBLE_DEVICES"]= "0,1" # Use GPU devices list
+        os.environ["CUDA_VISIBLE_DEVICES"]= ','.join([str(x) for x in range(self.model_config.device_count)]) # Use GPU devices list
         base_device_name = torch.cuda.get_device_properties(0).name
 
         if "A100" not in base_device_name:
@@ -98,7 +99,7 @@ class InferenceEngine:
         org_list = {}
         if type(self.data_config.data_path) == str:
             # Maybe single data
-            if "." in self.data_config.data_path:
+            if "." in self.data_config.data_path[1:]:
                 file = self.data_config.data_path[:-1].split('/')[-1].split('.')[0]
                 
                 tmp = self._load_data(self.data_config.data_path) # It must be arrow type of HF.Dataset
@@ -144,6 +145,10 @@ class InferenceEngine:
 
         elif "csv" in self.data_config.save_type:
             dataset.to_csv(save_path+f"{file_name}_inference.csv")
+            
+        elif "xlsx" in self.data_config.save_type or "excel" in self.data_config.save_type:
+            tmp = dataset.to_pandas()
+            tmp.to_excel(save_path+f"{file_name}_inference.xlsx")
 
         else:
             raise ValueError(

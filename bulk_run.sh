@@ -1,0 +1,1 @@
+python inference.py --config_path ./configs/bulk_base.yaml

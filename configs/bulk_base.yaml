@@ -12,9 +12,9 @@ model:
          } # 'enable_lora': False, 'max_lora_rank': 64, 
 
 data: 
-  data_path: './data/sample.xlsx'
+  data_path: './data/'
   save_path: './output'
-  save_type: 'csv'
+  save_type: 'excel'
 
 generate:
   use_chat: True
