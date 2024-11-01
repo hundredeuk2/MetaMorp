@@ -5,9 +5,9 @@ prompt:
   ### 질문 : {질문}"
 
 model:
-  type: "white_box" # "black_box", "white_box" / "black_box" refers to API generation like OpenAI's GPT API or Claude3, and "white_box" refers to open-source or local LLMs
-  device_count: 2
-  model_name: "Qwen/Qwen2.5-1.5B"
+  type: "black_box" # "black_box", "white_box" / "black_box" refers to API generation like OpenAI's GPT API or Claude3, and "white_box" refers to open-source or local LLMs
+  model_name: "openai/gpt-4o-mini"
+  api_key: "sk-your API Key"
   vllm_config:
     max_model_len: 4096
     tensor_parallel_size: 2 # device_count와 같은 정수값 또는 사용하고싶은 GPU 개수
@@ -20,10 +20,10 @@ model:
 data: 
   data_path: './data/sample.xlsx'
   save_path: './output'
-  save_type: 'csv'
+  save_type: 'excel'
 
 generate:
-  use_chat: True
+  use_chat: False
   vllm_gen_config: {
         "max_tokens": 1024,
         "temperature": 0,

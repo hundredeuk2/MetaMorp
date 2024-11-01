@@ -18,7 +18,7 @@ model:
     # max_lora_rank: 64   # When using LoRA Adapter
 
 data: 
-  data_path: './data/sample.xlsx'
+  data_path: './data/'
   save_path: './output'
   save_type: 'csv'
 
