@@ -182,7 +182,8 @@ class InferenceEngine:
             save_format = self.data_config.save_format
         
         if "." in file_name:
-            file_name = file_name.split(".")[0]
+            file_name = os.path.splitext(file_name)[0]
+
             
         save_format = "_".join([file_name, save_format])
         
