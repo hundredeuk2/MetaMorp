@@ -5,7 +5,7 @@ import torch
 import argparse
 from omegaconf import OmegaConf
 
-from vllm import LLM, SamplingParams
+from vllm import SamplingParams
 from transformers import AutoTokenizer
 
 class InferenceEngine:
@@ -56,21 +56,39 @@ class InferenceEngine:
         return {"text":text}
     
     def _model_initialize(self):
-        
         # Todo: Clozed Model initalize
-        os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"  # Arrange GPU devices starting from 0
-        # os.environ["CUDA_VISIBLE_DEVICES"]= "0,1" # Use GPU devices list
-        os.environ["CUDA_VISIBLE_DEVICES"]= ','.join([str(x) for x in range(self.model_config.device_count)]) # Use GPU devices list
-        base_device_name = torch.cuda.get_device_properties(0).name
+        if self.model_config.type == "black_box":
+            
+            if not self.model_config.api_key:
+                raise ValueError("API key is missing in the configuration file.")
+    
+            company_name, model_name = self.model_config.model_name.split("/")
+            if company_name == "openai":
+                from langchain_openai import ChatOpenAI
+                self.model = ChatOpenAI(model=model_name, api_key=self.model_config.api_key)
+                
+            elif company_name == "anthropic":
+                from langchain_openai import ChatOpenAI
+                # self.model = ChatAnthropic(model="claude-3-5-sonnet-20240620")
+                self.model = ChatAnthropic(model=model_name, api_key=self.model_config.api_key)
+            else:
+                raise ValueError(f"{company_name}'s models are not supported in this version.")
+        
+        else:
+            os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"  # Arrange GPU devices starting from 0
+            # os.environ["CUDA_VISIBLE_DEVICES"]= "0,1" # Use GPU devices list
+            os.environ["CUDA_VISIBLE_DEVICES"]= ','.join([str(x) for x in range(self.model_config.device_count)]) # Use GPU devices list
+            base_device_name = torch.cuda.get_device_properties(0).name
 
-        if "A100" not in base_device_name:
-            self.model_config.vllm_config.dtype = "half"
-
-        # Todo: enable adapter
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_config.model_name)
-        self.model = LLM(model = self.model_config.model_name,
-            **self.model_config.vllm_config
-            )
+            if "A100" not in base_device_name:
+                self.model_config.vllm_config.dtype = "half"
+                
+            from vllm import LLM
+            # Todo: enable adapter
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_config.model_name)
+            self.model = LLM(model = self.model_config.model_name,
+                **self.model_config.vllm_config
+                )
         
     def _data_initialize(self):
         '''
