@@ -175,18 +175,26 @@ class InferenceEngine:
             save_path += '/'
         os.makedirs(save_path ,exist_ok=True)
         
+        if not self.data_config.save_format:
+            save_format = "inference"
+            print(f"We didn't set any save format, so we set the default save file name to '_{save_format}_'.")
+        else: 
+            save_format = self.data_config.save_format
+        
         if "." in file_name:
             file_name = file_name.split(".")[0]
+            
+        save_format = "_".join([file_name, save_format])
         
         if "json" in self.data_config.save_type:
-            dataset.to_json(save_path+f"{file_name}_inference.json")
+            dataset.to_json(save_path+save_format+".json")
 
         elif "csv" in self.data_config.save_type:
-            dataset.to_csv(save_path+f"{file_name}_inference.csv")
+            dataset.to_csv(save_path+save_format+".csv")
             
         elif "xlsx" in self.data_config.save_type or "excel" in self.data_config.save_type:
             tmp = dataset.to_pandas()
-            tmp.to_excel(save_path+f"{file_name}_inference.xlsx")
+            tmp.to_excel(save_path+save_format+".xlsx")
 
         else:
             raise ValueError(

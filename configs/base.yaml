@@ -21,6 +21,7 @@ data:
   data_path: './data/'
   save_path: './output'
   save_type: 'csv'
+  save_format: 'qwen'
 
 generate:
   use_chat: True
