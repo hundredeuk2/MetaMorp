@@ -77,7 +77,7 @@ class InferenceEngine:
                 self.model = ChatOpenAI(model=model_name, api_key=self.model_config.api_key)
                 
             elif company_name == "anthropic":
-                from langchain_openai import ChatOpenAI
+                from langchain_anthropic import ChatAnthropic
                 # self.model = ChatAnthropic(model="claude-3-5-sonnet-20240620")
                 self.model = ChatAnthropic(model=model_name, api_key=self.model_config.api_key)
             else:
@@ -182,7 +182,7 @@ class InferenceEngine:
             save_format = self.data_config.save_format
         
         if "." in file_name:
-            file_name = os.path.splitext(file_name)[0]
+            file_name = "_".join(os.path.splitext(file_name)[:-1])
 
             
         save_format = "_".join([file_name, save_format])
