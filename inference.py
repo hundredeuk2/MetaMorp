@@ -37,6 +37,13 @@ class InferenceEngine:
             
         elif "json" in data_path:
             dt = datasets.Dataset.from_json(tmp_data)
+            
+        else:
+            try:
+                dt = datasets.load_dataset(data_path)
+                
+            except:
+                raise ValueError("Not supported Data type")
         
         return dt
         
@@ -85,7 +92,6 @@ class InferenceEngine:
         
         else:
             os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"  # Arrange GPU devices starting from 0
-            # os.environ["CUDA_VISIBLE_DEVICES"]= "0,1" # Use GPU devices list
             os.environ["CUDA_VISIBLE_DEVICES"]= ','.join([str(x) for x in range(self.model_config.device_count)]) # Use GPU devices list
             base_device_name = torch.cuda.get_device_properties(0).name
             
