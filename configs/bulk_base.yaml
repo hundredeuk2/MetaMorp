@@ -5,6 +5,7 @@ prompt:
   ### 질문 : {질문}"
 
 model:
+  type: "white_box" # "black_box", "white_box" / "black_box" refers to API generation like OpenAI's GPT API or Claude3, and "white_box" refers to open-source or local LLMs
   device_count: 2
   model_name: "Qwen/Qwen2.5-1.5B"
   vllm_config:
@@ -16,11 +17,11 @@ model:
     # enable_lora: False  # When using LoRA Adapter
     # max_lora_rank: 64   # When using LoRA Adapter
 
-
 data: 
   data_path: './data/'
   save_path: './output'
   save_type: 'excel'
+  save_format: 'qwen'
 
 generate:
   use_chat: True

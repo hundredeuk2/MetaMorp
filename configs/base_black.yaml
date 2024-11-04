@@ -21,6 +21,7 @@ data:
   data_path: './data/sample.xlsx'
   save_path: './output'
   save_type: 'excel'
+  save_format: 'gpt'
 
 generate:
   use_chat: False
